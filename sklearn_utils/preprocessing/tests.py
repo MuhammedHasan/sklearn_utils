@@ -4,7 +4,8 @@ from sklearn.feature_extraction import DictVectorizer
 from sklearn.feature_selection import VarianceThreshold
 
 from .inverse_dict_vectorizer import InverseDictVectorizer
-from .basic_fold_change_preprocessing import BasicFoldChangeScaler
+from .fold_change_preprocessing import FoldChangeScaler
+from .feature_renaming import FeatureRenaming
 
 
 class TestInverseDictVectorizer(unittest.TestCase):
@@ -36,13 +37,13 @@ class TestInverseDictVectorizer(unittest.TestCase):
         self.assertEqual(expected_data, scaler.fit_transform(data))
 
 
-class TestBasicFoldChangeScaler(unittest.TestCase):
+class TestFoldChangeScaler(unittest.TestCase):
     def setUp(self):
         self.X = [{'a': 2.5, 'b': 5, 'c': 10}, {'a': 20, 'b': 40, 'c': 80}]
         self.h = {'a': 10, 'b': 10, 'c': 10}
         self.X.append(self.h)
         self.y = ['b', 'b', 'h']
-        self.scaler = BasicFoldChangeScaler()
+        self.scaler = FoldChangeScaler()
 
     def test_fit(self):
         self.scaler.fit(self.X, self.y)
@@ -74,3 +75,11 @@ class TestBasicFoldChangeScaler(unittest.TestCase):
 
         self.scaler._avgs = {'a': 10**6}
         self.assertEqual(self.scaler._scale('a', 10**-6), -10)
+
+
+class TestFeatureRenaming(unittest.TestCase):
+    def setUp(self):
+        self.preprocessing = FeatureRenaming({'x': 'y'})
+
+    def test_transform(self):
+        self.assertEqual(self.preprocessing.transform([{'x': 1}]), [{'y': 1}])

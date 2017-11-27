@@ -2,9 +2,10 @@ from sklearn.base import TransformerMixin
 from sklearn_utils.utils import average_by_label, map_dict_list
 
 
-class BasicFoldChangeScaler(TransformerMixin):
+class FoldChangeScaler(TransformerMixin):
     '''
-    Scales by measured value by distance to mean according to time of value
+    Scales by measured value by distance to mean according to time of value.
+    Useful when you want to standart scale but no varience.
     '''
 
     def __init__(self, bounds=(-10, 10)):
