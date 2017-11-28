@@ -8,7 +8,9 @@ setup(
     author="Muhammed Hasan Celik",
     author_email="hasancelik@std.sehir.edu.tr",
     url="https://github.com/MuhammedHasan/sklearn_utils",
-    install_requires=['numpy', 'pandas', 'scipy', 'scikit-learn'],
+    install_requires=[
+        'numpy', 'pyfunctional', 'pandas', 'scipy', 'scikit-learn'
+    ],
     include_package_data=True,
     test_suite='sklearn_utils.tests',
     keywords=['scikit-learn', 'machine-learning', 'utility-library'],

@@ -20,3 +20,10 @@ Utils
 		:members:
 		:undoc-members:
 		:show-inheritance:
+
+Noise
+-------------
+.. automodule:: sklearn_utils.noise
+		:members:
+		:undoc-members:
+		:show-inheritance:
