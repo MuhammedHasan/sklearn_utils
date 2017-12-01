@@ -31,11 +31,14 @@ from sklearn_utils.preprocessing import StandardScalerByLabel
 
 vect = DictVectorizer(sparse=False) 
 skb = SelectKBest(k=100)
-pipe.extend([
+pipe = Pipelien([
     ('vect', vect),
     ('skb', skb),
     ('inv_vect', InverseDictVectorizer(vect, skb))
-]
+])
+
+X_t = pipe.fit_transform(X, y)
+
 ```
 
 For more features, You can check the documentation.
