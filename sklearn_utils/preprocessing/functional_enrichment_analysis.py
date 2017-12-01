@@ -18,6 +18,7 @@ class FunctionalEnrichmentAnalysis(TransformerMixin):
         :reference_label: label of refence values in the calculation
         :method: only fisher exact test avaliable so far
         :feature_groups: list of dict where keys are new feature and values are list of old features
+        :filter_func: function return true or false
         '''
         if method != "fisher_exact":
             raise NotImplemented('Only fisher exact test is implemented')
@@ -35,7 +36,6 @@ class FunctionalEnrichmentAnalysis(TransformerMixin):
         '''
         :X: list of dict
         :y: labels
-        :filter_func: function return true or false
         '''
         return [{
             new_feature: self._fisher_pval(x, old_features)

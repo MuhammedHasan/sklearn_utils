@@ -46,7 +46,7 @@ class TestFoldChangeScaler(unittest.TestCase):
         self.h = {'a': 10, 'b': 10, 'c': 10}
         self.X.append(self.h)
         self.y = ['b', 'b', 'h']
-        self.scaler = FoldChangeScaler()
+        self.scaler = FoldChangeScaler(reference_label='h')
 
     def test_fit(self):
         self.scaler.fit(self.X, self.y)

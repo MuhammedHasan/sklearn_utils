@@ -8,12 +8,21 @@ class FoldChangeScaler(TransformerMixin):
     Useful when you want to standart scale but no varience.
     '''
 
-    def __init__(self, bounds=(-10, 10)):
+    def __init__(self, reference_label, bounds=(-10, 10)):
+        """
+        :reference_label: the label scaling will be performed by.
+        :bounds: min-max values the fold change scaler can get. There are bounds because the scaling can provide unstable results. 
+        """
         self._min = bounds[0]
         self._max = bounds[1]
+        self.reference_label = reference_label
 
     def fit(self, X, y):
-        self._avgs = average_by_label(X, y, 'h')
+        '''
+        :X: list of dict
+        :y: labels
+        '''
+        self._avgs = average_by_label(X, y, self.reference_label)
         return self
 
     def transform(self, X):
