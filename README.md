@@ -31,7 +31,7 @@ from sklearn_utils.preprocessing import StandardScalerByLabel
 
 vect = DictVectorizer(sparse=False) 
 skb = SelectKBest(k=100)
-pipe = Pipelien([
+pipe = Pipeline([
     ('vect', vect),
     ('skb', skb),
     ('inv_vect', InverseDictVectorizer(vect, skb))
