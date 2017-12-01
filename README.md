@@ -27,7 +27,7 @@ X_t = preprocessing.fit_transform(X, y)
 Or you may want your list of dict in the end of sklearn pipeline, after set of operations and feature selection.
 
 ```
-from sklearn_utils.preprocessing import StandardScalerByLabel
+from sklearn_utils.preprocessing import InverseDictVectorizer
 
 vect = DictVectorizer(sparse=False) 
 skb = SelectKBest(k=100)
