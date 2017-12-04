@@ -22,6 +22,6 @@ class FeatureMerger(TransformerMixin):
 
     def transform(self, X, y=None):
         return [{
-            f: self.strategy([x[i] for i in fs])
+            f: self.strategy([x[i] for i in fs if i in x])
             for f, fs in self.features.items()
         } for x in X]

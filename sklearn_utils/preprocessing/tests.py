@@ -6,7 +6,7 @@ from sklearn.feature_selection import VarianceThreshold
 from .inverse_dict_vectorizer import InverseDictVectorizer
 from .fold_change_preprocessing import FoldChangeScaler
 from .feature_renaming import FeatureRenaming
-from .dynamic_preprocessing import DynamicPreprocessing
+from .dynamic_pipeline import DynamicPipeline
 from .functional_enrichment_analysis import FunctionalEnrichmentAnalysis
 from .standard_scale_by_label import StandardScalerByLabel
 from .feature_merger import FeatureMerger
@@ -91,10 +91,29 @@ class TestFeatureRenaming(unittest.TestCase):
 
 class TestDynamicPreprocessing(unittest.TestCase):
     def setUp(self):
-        pass
+        self.X = [{'a': 1, 'b': 2}]
+
+        vect = DictVectorizer(sparse=False)
+
+        class MyPipeline(DynamicPipeline):
+            steps = {
+                'vect': vect,
+                'inv-vect': InverseDictVectorizer(vect),
+            }
+
+            default_steps = ['vect']
+
+        self.cls = MyPipeline
 
     def test_new(self):
-        pass
+        pipe = self.cls()
+        self.assertEqual(pipe.fit_transform(self.X).tolist(), [[1, 2]])
+
+        pipe = self.cls(['vect'])
+        self.assertEqual(pipe.fit_transform(self.X).tolist(), [[1, 2]])
+
+        pipe = self.cls(['vect', 'inv-vect'])
+        self.assertEqual(pipe.fit_transform(self.X), self.X)
 
 
 class TestFunctionalEnrichmentAnalysis(unittest.TestCase):
