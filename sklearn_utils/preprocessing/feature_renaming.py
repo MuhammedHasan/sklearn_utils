@@ -9,7 +9,7 @@ class FeatureRenaming(TransformerMixin):
 
     def __init__(self, names):
         '''
-        :names: dict which contain old names as feature and new names as value.  
+        :names: dict which contain old feature names as key and new names as value.  
         '''
         self.names = names
 

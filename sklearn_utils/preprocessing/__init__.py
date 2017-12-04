@@ -4,6 +4,7 @@ from .feature_renaming import FeatureRenaming
 from .dynamic_preprocessing import DynamicPreprocessing
 from .standard_scale_by_label import StandardScalerByLabel
 from .functional_enrichment_analysis import FunctionalEnrichmentAnalysis
+from .feature_merger import FeatureMerger
 
 __all__ = [
     'InverseDictVectorizer',
@@ -12,4 +13,5 @@ __all__ = [
     'DynamicPreprocessing',
     'StandardScalerByLabel',
     'FunctionalEnrichmentAnalysis',
+    'FeatureMerger',
 ]

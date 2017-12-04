@@ -34,3 +34,8 @@ def map_dict_list(ds, key_func=None, value_func=None):
     :value_func: func which will run on values.
     '''
     return [map_dict(d, key_func, value_func) for d in ds]
+
+
+def check_reference_label(y):
+    # TODO: implement and use this.
+    pass

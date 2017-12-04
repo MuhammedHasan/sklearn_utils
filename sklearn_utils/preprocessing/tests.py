@@ -9,6 +9,7 @@ from .feature_renaming import FeatureRenaming
 from .dynamic_preprocessing import DynamicPreprocessing
 from .functional_enrichment_analysis import FunctionalEnrichmentAnalysis
 from .standard_scale_by_label import StandardScalerByLabel
+from .feature_merger import FeatureMerger
 
 
 class TestInverseDictVectorizer(unittest.TestCase):
@@ -161,3 +162,16 @@ class TestStandardScalerByLabel(unittest.TestCase):
         expected_X = self.X
         transformed_X = self.scaler.transform(self.X).tolist()
         self.assertEqual(expected_X, transformed_X)
+
+
+class TestFeatureMerger(unittest.TestCase):
+    def setUp(self):
+        self.features = {'A': ['a', 'b']}
+        self.X = [{'a': 1, 'b': 5}]
+
+    def test_fit_transform(self):
+        X_t = FeatureMerger(self.features, 'mean').fit_transform(self.X)
+        self.assertEqual(X_t, [{'A': 3}])
+
+        X_t = FeatureMerger(self.features, 'sum').fit_transform(self.X)
+        self.assertEqual(X_t, [{'A': 6}])
