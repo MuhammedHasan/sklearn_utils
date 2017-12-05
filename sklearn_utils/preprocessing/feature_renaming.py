@@ -20,4 +20,7 @@ class FeatureRenaming(TransformerMixin):
         '''
         :X: list of dict
         '''
-        return map_dict_list(X, key_func=lambda k, v: self.names[k])
+        return map_dict_list(
+            X,
+            key_func=lambda k, v: self.names[k],
+            if_func=lambda k, v: k in self.names)

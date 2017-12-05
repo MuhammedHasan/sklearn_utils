@@ -16,7 +16,7 @@ def average_by_label(X, y, label):
                            filter_by_label(X, y, label)[0]).mean().to_dict())
 
 
-def map_dict(d, key_func=None, value_func=None):
+def map_dict(d, key_func=None, value_func=None, if_func=None):
     '''
     :d: dict
     :key_func: func which will run on key.
@@ -24,16 +24,20 @@ def map_dict(d, key_func=None, value_func=None):
     '''
     key_func = key_func or (lambda k, v: k)
     value_func = value_func or (lambda k, v: v)
-    return {key_func(*k_v): value_func(*k_v) for k_v in d.items()}
+    if_func = if_func or (lambda k, v: True)
+    return {
+        key_func(*k_v): value_func(*k_v)
+        for k_v in d.items() if if_func(*k_v)
+    }
 
 
-def map_dict_list(ds, key_func=None, value_func=None):
+def map_dict_list(ds, key_func=None, value_func=None, if_func=None):
     '''
     :ds: list of dict
     :key_func: func which will run on key.
     :value_func: func which will run on values.
     '''
-    return [map_dict(d, key_func, value_func) for d in ds]
+    return [map_dict(d, key_func, value_func, if_func) for d in ds]
 
 
 def check_reference_label(y):
