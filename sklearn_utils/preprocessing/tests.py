@@ -185,7 +185,7 @@ class TestStandardScalerByLabel(unittest.TestCase):
 
 class TestFeatureMerger(unittest.TestCase):
     def setUp(self):
-        self.features = {'A': ['a', 'b']}
+        self.features = {'A': ['a', 'b'], 'C': ['x', 'y']}
         self.X = [{'a': 1, 'b': 5}]
 
     def test_fit_transform(self):
