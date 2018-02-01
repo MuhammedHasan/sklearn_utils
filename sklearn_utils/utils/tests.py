@@ -32,16 +32,23 @@ class TestDataUtils(unittest.TestCase):
         self.assertEqual(X_t, {'a': 5, 'b': 6})
 
     def test_map_dict(self):
-        key_func = lambda k, v: k + '_'
-        inc_func = lambda k, v: v + 1
+        def key_func(k, v): return k + '_'
+
+        def inc_func(k, v): return v + 1
         d_t = map_dict(self.X[0], key_func=key_func, value_func=inc_func)
         self.assertEqual(d_t, {'a_': 2, 'b_': 3})
 
     def test_map_dict_list(self):
-        key_func = lambda k, v: k + '_'
-        inc_func = lambda k, v: v + 1
+        def key_func(k, v): return k + '_'
+
+        def inc_func(k, v): return v + 1
         d_t = map_dict_list(self.X[:2], key_func=key_func, value_func=inc_func)
         self.assertEqual(d_t, [{'a_': 2, 'b_': 3}, {'a_': 3, 'b_': 4}])
+
+    def test_check_reference_label(self):
+        check_reference_label(self.y, 'h')
+        with self.assertRaises(ValueError):
+            check_reference_label(self.y, 'x')
 
 
 class TestSkUtilsIO(unittest.TestCase):
