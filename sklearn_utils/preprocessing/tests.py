@@ -43,7 +43,8 @@ class TestInverseDictVectorizer(unittest.TestCase):
 
 class TestFoldChangeScaler(unittest.TestCase):
     def setUp(self):
-        self.X = [{'a': 2.5, 'b': 5, 'c': 10}, {'a': 20, 'b': 40, 'c': 80}]
+        self.X = [{'a': 2.5, 'b': 5, 'c': 10},
+                  {'a': 20, 'b': 40, 'c': 80, 'x': 1}]
         self.h = {'a': 10, 'b': 10, 'c': 10}
         self.X.append(self.h)
         self.y = ['b', 'b', 'h']
