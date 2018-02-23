@@ -1,8 +1,11 @@
+import math
 import json
 import gzip
 import pickle
 
 import pandas as pd
+
+from .data_utils import map_dict_list
 
 
 class SkUtilsIO:
@@ -22,15 +25,17 @@ class SkUtilsIO:
         Read dataset from csv.
         '''
         df = pd.read_csv(self.path, header=0)
-        X = df.ix[:, df.columns != label_column].to_dict('records')
-        y = df[label_column].values
+        X = df.loc[:, df.columns != label_column].to_dict('records')
+        X = map_dict_list(X, if_func=lambda k, v: v and math.isfinite(v))
+        y = list(df[label_column].values)
         return X, y
 
     def to_csv(self, X, y):
         '''
         Writes dataset to csv.
         '''
-        pass
+        # TODO: implement this
+        raise NotImplementedError
 
     def from_json(self):
         '''
@@ -43,8 +48,9 @@ class SkUtilsIO:
     def to_json(self, X, y):
         '''
         Reads dataset to csv.
-        :X: dataset as list of dict.
-        :y: labels.
+
+        :param X: dataset as list of dict.
+        :param y: labels.
         '''
         with gzip.open('%s.gz' % self.path, 'wt') if self.gz else open(
                 self.path, 'w') as file:
@@ -54,12 +60,13 @@ class SkUtilsIO:
         '''
         Reads dataset to pickle.
         '''
-        pass
+        raise NotImplementedError
 
     def to_pickle(self, X, y):
         '''
         Writes dataset to pickle.
-        :X: dataset as list of dict.
-        :y: labels.
+
+        :param X: dataset as list of dict.
+        :param y: labels.
         '''
-        pass
+        raise NotImplementedError
