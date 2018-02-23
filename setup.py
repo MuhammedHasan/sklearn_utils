@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='sklearn_utils',
-    version='0.0.12',
+    version='0.0.13',
     packages=find_packages(),
     description='Sklearn utils',
     author="Muhammed Hasan Celik",

@@ -12,7 +12,6 @@ def filter_by_label(X, y, ref_label, reverse=False):
     :param ref_label: reference label
     :param bool reverse: if false selects ref_labels else eliminates
     '''
-
     check_reference_label(y, ref_label)
 
     return list(zip(*filter(lambda t: (not reverse) == (t[1] == ref_label),
