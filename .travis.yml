@@ -1,20 +1,15 @@
 language: python
-
 before_script:
-  - pip install --no-use-wheel --no-cache-dir cython
-
+- pip install --no-use-wheel --no-cache-dir cython
 python:
-  - 3.5.2
-
+- 3.5.2
 script: coverage run setup.py test
-
 after_success:
-  - codecov
-
+- codecov
 deploy:
   provider: pypi
-  on:
-    branch: master
   user: muhammedhasan
   password:
-    secure: f+3I+AlSDEUw2PiQahpWl+P+4vMjqBcuX8DX3S8s7gxxOaedQDXTl+LppFxcyI3apea63xanqiMJzdGtYgBJjnzzLGW3PKv/+ssZFdoHm2lNg2hoMCL1shKSTxKKy2XsexfyXThtWllkZ/BQD+deAsHsFUFHwgAESqnT2IA244xfiCyVQYxCv2KNFcYaUAZkgwL9Y3uIs/9FGXJe3IQkzHs9Yng4rm5dK8fMKqFyKVLzLGOagEaG8HQydKmXg10TQ+dFXf6EmMlLf6EZheNDj+YqaS+7UEolYYXyCecMT3b+tz/b70w2Hyco43Isc4kdBS01Q/R/GKd7oTTP54cZuhJ0aE+pr9adNh9lltE97XxSpAiITP9xOF4jue3LpZ33S/Rj4xdbqWNcbEdfHEVbkqNiemNQCOd2eqbw7hC5TAWBzwd+RYQsN0cqvlOTfgkdGoK18Vg1RoJkTpmPaEgv96thRMNlI4o5Cq/sB5AzWUQCR8ArQMILm+K40FT+cpCQO9fU/6o0hbwp6wSwY9RosgOg2D5mKS8l2REn+A9TN9E0mWmeUQjUJQp73i+2kADlHrC2f6LhQ0mCZrkEJe5VHD2rFMYjfBtnYZgpKEOwSHstq43JOX6a4oE0OiGpTnyjHFQP2oIfyG7jxwZGXOaocd9fr9bhI9iAoezAtKT6SpI=
+    secure: JUFvOBv8xAbSHDtV8kmtUxsHOInIIxM/1z7I4Fv/kKnj5VHxBuIZPWqTfzNDPZITM5AyWzbD04ygJBYUzX0+UBPmr+/rs0yhAxzP8fFoTobU7FXQ+OcWfHPGFfiL1YNxKcuQ0IPC9RZrfHzTeExKtxBODlBMs/ncTBCVqF2hfAQzZ9iZoziEfxFFg938fPqjE4Ep+Bw7FdEG47RsYN3A0w0WSk81b6qvVtLeqAPEMjjwZrN4os03RjJYgjWc3Hr9JCFdkGZ6fBrJ75ATBXwAFlhPCavnPeOeewU6OYPVCJKSOpmdXl6emtpzj+Zi9Kk4rU+8GPUHpAdmOzsC1GVR1z5zCmUI4tvFGMGaghYKtXcGEE+X5V0PjFMeVeTh3+ebkZY69XCapuiR8yHdvCdx44/yvQ2Lb7bJ76xRd8JBHd7AsjU+bjXdFWcORSwuteWsV8q86bYz1tC++gFQJhs5BTwmnEM20dTpBEnTm+57XxkxKTRjwWGzdZP+V5VdybjWXjvtVN271EhE3VO7y1/7ERfnH8bNuVCfyVTPpy5g7miCvCUAAyBTfNlOCeji3vNgHSD6uZzLR5oH0PuWfGrbUdZAprLRxC2qTMMS2TpAWS75oQUQLCaB4jZNlfIMj8Y400+j7gNpQzcaOqvLk3oTm+98DR1sspdlP3Tj35EwedU=
+  on:
+    branch: master
