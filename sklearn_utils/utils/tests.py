@@ -49,6 +49,22 @@ class TestDataUtils(unittest.TestCase):
         with self.assertRaises(ValueError):
             check_reference_label(self.y, 'x')
 
+    def test_variance_threshold_on_df(self):
+        df = pd.DataFrame({'a': [1, 2, 3], 'b': [1, 1, 1]})
+        df_expected = pd.DataFrame({'a': [1, 2, 3]})
+        return pd.testing.assert_frame_equal(
+            variance_threshold_on_df(df), df_expected)
+
+    def test_feature_importance_report(self):
+        X = [
+            {'a': 1, 'b': 2},
+            {'a': 1, 'b': 2},
+            {'a': 2, 'b': 2},
+            {'a': 2, 'b': 2}
+        ]
+        df = feature_importance_report(X, self.y)
+        self.assertListEqual(list(df.values[0]), [1, 2, float('inf'), 0])
+
 
 class TestSkUtilsIO(unittest.TestCase):
     def setUp(self):
