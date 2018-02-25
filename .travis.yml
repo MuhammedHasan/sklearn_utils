@@ -1,6 +1,8 @@
 language: python
 
-before_script: 
+before_script:
+  - pip install --no-use-wheel --no-cache-dir cython
+
 
 python:
   - 3.5.2
