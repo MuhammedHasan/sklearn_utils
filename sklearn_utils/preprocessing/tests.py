@@ -1,44 +1,46 @@
 import unittest
-
 from sklearn.feature_extraction import DictVectorizer
+from sklearn.preprocessing import StandardScaler
 from sklearn.feature_selection import VarianceThreshold
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import cross_val_score
+from sklearn.pipeline import Pipeline
 
-from .inverse_dict_vectorizer import InverseDictVectorizer
-from .fold_change_preprocessing import FoldChangeScaler
-from .feature_renaming import FeatureRenaming
 from .dynamic_pipeline import DynamicPipeline
+from .feature_merger import FeatureMerger
+from .feature_renaming import FeatureRenaming
+from .fold_change_preprocessing import FoldChangeScaler
 from .functional_enrichment_analysis import FunctionalEnrichmentAnalysis
 from .standard_scale_by_label import StandardScalerByLabel
-from .feature_merger import FeatureMerger
+from .dict_input import DictInput
 
 
-class TestInverseDictVectorizer(unittest.TestCase):
+class TestDictInput(unittest.TestCase):
     def setUp(self):
-        self.data = [{
-            'a': 0,
-            'b': 2,
-            'c': 0,
-            'd': 3
-        }, {
-            'a': 0,
-            'b': 1,
-            'c': 4,
-            'd': 3
-        }]
-        self.vect = DictVectorizer(sparse=False)
-        self.trans_data = self.vect.fit_transform(self.data)
+        self.data = [
+            {'a': 0, 'b': 2, 'c': 0, 'd': 3},
+            {'a': 0, 'b': 1, 'c': 4, 'd': 3}
+        ]
 
     def test_fit_transform(self):
-        scaler = InverseDictVectorizer(self.vect)
-        expected_data = [{'b': 2, 'd': 3}, {'b': 1, 'd': 3, 'c': 4}]
-        self.assertEqual(expected_data, scaler.transform(self.trans_data))
+        scaler = DictInput(StandardScaler())
+        expected_data = [{'b': 1.0, 'c': -1.0}, {'b': -1.0, 'c': 1.0}]
+        self.assertEqual(expected_data, scaler.fit_transform(self.data))
 
     def test_fit_transform_with_feature_selection(self):
-        vt = VarianceThreshold()
-        data = vt.fit_transform(self.trans_data)
-        scaler = InverseDictVectorizer(self.vect, vt)
-        expected_data = [{'b': 2, 'c': 0}, {'b': 1, 'c': 4}]
-        self.assertEqual(expected_data, scaler.fit_transform(data))
+        vt = DictInput(VarianceThreshold(), feature_selection=True)
+        expected_data = [{'b': 2.0}, {'b': 1.0, 'c': 4.0}]
+        self.assertEqual(expected_data, vt.fit_transform(self.data))
+
+    def test_clone_safety(self):
+        X = [self.data[0]] * 10 + [self.data[1]] * 10
+        y = ['x'] * 10 + ['h'] * 10
+        pipe = Pipeline([
+            ('vt', DictInput(VarianceThreshold(), feature_selection=True)),
+            ('vect', DictVectorizer()),
+            ('clf', LogisticRegression())
+        ])
+        cross_val_score(pipe, X, y, cv=5, scoring='f1_micro')
 
 
 class TestFoldChangeScaler(unittest.TestCase):
@@ -92,14 +94,13 @@ class TestFeatureRenaming(unittest.TestCase):
 
 class TestDynamicPreprocessing(unittest.TestCase):
     def setUp(self):
-        self.X = [{'a': 1, 'b': 2}]
-
-        vect = DictVectorizer(sparse=False)
+        self.X = [{'a': 1, 'b': 2}, {'a': 3, 'b': 1}]
 
         class MyPipeline(DynamicPipeline):
             steps = {
-                'vect': vect,
-                'inv-vect': InverseDictVectorizer(vect),
+                'vect': DictVectorizer(sparse=False),
+                'std': StandardScaler(),
+                'vect-std': DictInput(StandardScaler()),
             }
 
             default_steps = ['vect']
@@ -108,13 +109,18 @@ class TestDynamicPreprocessing(unittest.TestCase):
 
     def test_new(self):
         pipe = self.cls()
-        self.assertEqual(pipe.fit_transform(self.X).tolist(), [[1, 2]])
+        self.assertEqual(pipe.fit_transform(self.X).tolist(), [[1, 2], [3, 1]])
 
         pipe = self.cls(['vect'])
-        self.assertEqual(pipe.fit_transform(self.X).tolist(), [[1, 2]])
+        self.assertEqual(pipe.fit_transform(self.X).tolist(), [[1, 2], [3, 1]])
 
-        pipe = self.cls(['vect', 'inv-vect'])
-        self.assertEqual(pipe.fit_transform(self.X), self.X)
+        expected = [[-1, 1], [1, -1]]
+        pipe = self.cls(['vect', 'std'])
+        self.assertEqual(pipe.fit_transform(self.X).tolist(), expected)
+
+        expected = [{'a': -1, 'b': 1}, {'a': 1, 'b': -1}]
+        pipe = self.cls(['vect-std'])
+        self.assertEqual(pipe.fit_transform(self.X), expected)
 
 
 class TestFunctionalEnrichmentAnalysis(unittest.TestCase):
